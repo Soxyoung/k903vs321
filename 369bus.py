@@ -1,4 +1,5 @@
 # coding:utf-8
+import base64
 
 import requests
 import json
@@ -39,8 +40,10 @@ def get_jwt_token():
     try:
         time_369 = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.localtime())
         sign = str(uuid.uuid1()).replace("-", "")
+        s_host = b'YXBpLjM2OWN4LmNu'
+        host = base64.b64decode(s_host).decode()
         headers = {
-            'Host': 'api.369cx.cn',
+            'Host': host,
             'accept': '*/*',
             'authorization': '',
             'accept-language': 'zh-Hans-CN;q=1, en-CN;q=0.9',
@@ -50,7 +53,9 @@ def get_jwt_token():
             'geo': '',
             'sign': sign,
         }
-        response = requests.post('https://api.369cx.cn/v2/Auth/LoginByTemp', headers=headers)
+        s_url = b'aHR0cHM6Ly9hcGkuMzY5Y3guY24vdjIvQXV0aC9Mb2dpbkJ5VGVtcA=='
+        url = base64.b64decode(s_url).decode()
+        response = requests.post(url, headers=headers)
         print(response.json()["result"]["token"])
         return str(response.json()["result"]["token"])
     except Exception as err:
@@ -67,8 +72,10 @@ def get_jwt_token():
         ]
         return random.choice(jwt_dict)
 
+s_host = b'YXBpLjM2OWN4LmNu'
+host = base64.b64decode(s_host).decode()
 headers = {
-    'Host': 'api.369cx.cn',
+    'Host': host,
     'content-type': 'application/json',
     'authorization': get_jwt_token(),
     'CityId': '2500',
@@ -83,7 +90,9 @@ SHA_TZ = timezone(
 
 def scan(LINE, stations, SRC, DEST, dict, LINE_NAME):
     try:
-        response = requests.get('https://api.369cx.cn/v2/Bus/GetBussesByLineId/' + str(LINE), headers=headers)
+        s_url = b'aHR0cHM6Ly9hcGkuMzY5Y3guY24vdjIvQnVzL0dldEJ1c3Nlc0J5TGluZUlkLw=='
+        url = base64.b64decode(s_url).decode()
+        response = requests.get(str(url) + str(LINE), headers=headers)
         info = json.loads(response.text)
         result = info['result']
         for bus in result:
@@ -112,7 +121,9 @@ def scan(LINE, stations, SRC, DEST, dict, LINE_NAME):
 def research(LINE, SRC, DEST, LINE1, SRC1, DEST1, start_time, end_time):
 
     try:
-        response = requests.get('https://api.369cx.cn/v2/Line/GetRealTimeLineInfo/' + str(LINE), headers=headers)
+        s_url = b'aHR0cHM6Ly9hcGkuMzY5Y3guY24vdjIvTGluZS9HZXRSZWFsVGltZUxpbmVJbmZvLw=='
+        url = base64.b64decode(s_url).decode()
+        response = requests.get(str(url) + str(LINE), headers=headers)
         info = json.loads(response.text)
         stations = info['result']['stations']
         name = info['result']['name']
@@ -122,7 +133,9 @@ def research(LINE, SRC, DEST, LINE1, SRC1, DEST1, start_time, end_time):
         exit(0)
 
     try:
-        response = requests.get('https://api.369cx.cn/v2/Line/GetRealTimeLineInfo/' + str(LINE1), headers=headers)
+        s_url = b'aHR0cHM6Ly9hcGkuMzY5Y3guY24vdjIvTGluZS9HZXRSZWFsVGltZUxpbmVJbmZvLw=='
+        url = base64.b64decode(s_url).decode()
+        response = requests.get(url + str(LINE1), headers=headers)
         info = json.loads(response.text)
         stations1 = info['result']['stations']
         name1 = info['result']['name']
